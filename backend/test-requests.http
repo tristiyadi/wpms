@@ -1,0 +1,88 @@
+### Wellness Package Management System - Testing Flow
+### This file can be used with the "REST Client" extension in VS Code.
+
+@baseUrl = http://localhost:3000
+
+# ==========================================
+# 🟩 STEP 1: MOBILE FLOW (List Packages)
+# ==========================================
+
+# @name getMobilePackages
+GET {{baseUrl}}/mobile/packages
+Accept: application/json
+
+###
+
+# ==========================================
+# 🟦 STEP 2: ADMIN FLOW (Manage Packages)
+# ==========================================
+
+# 2.1 Get all packages (Admin)
+# @name getAdminPackages
+GET {{baseUrl}}/admin/packages
+Accept: application/json
+
+###
+
+# 2.2 Create a NEW package
+# @name createPackage
+POST {{baseUrl}}/admin/packages
+Content-Type: application/json
+
+{
+    "name": "Luxury Zen Spa",
+    "description": "Premium 120-minute therapeutic session with volcanic stones.",
+    "price": 1200000,
+    "duration_minutes": 120
+}
+
+###
+
+# 2.3 Store created ID for subsequent requests
+@newPackageId = {{createPackage.response.body.id}}
+
+###
+
+# 2.4 Update the package (Partial Update)
+# @name updatePackage
+PUT {{baseUrl}}/admin/packages/{{newPackageId}}
+Content-Type: application/json
+
+{
+    "price": 1350000,
+    "description": "Updated: Now includes herbal tea and essential oils."
+}
+
+###
+
+# 2.5 Delete the package
+# @name deletePackage
+DELETE {{baseUrl}}/admin/packages/{{newPackageId}}
+
+###
+
+# ==========================================
+# 🟥 STEP 3: VALIDATION TESTING (Zod)
+# ==========================================
+
+# 3.1 Test Validation Error (Negative Price)
+POST {{baseUrl}}/admin/packages
+Content-Type: application/json
+
+{
+    "name": "Invalid Package",
+    "price": -100,
+    "duration_minutes": 0
+}
+
+###
+
+# 3.2 Test Validation Error (Missing Name)
+POST {{baseUrl}}/admin/packages
+Content-Type: application/json
+
+{
+    "description": "No name provided",
+    "price": 50000,
+    "duration_minutes": 60
+}
