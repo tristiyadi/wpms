@@ -24,7 +24,31 @@ src/
    Create a `.env` file with:
    `NEXT_PUBLIC_API_URL=http://localhost:3000`
 
-3. **Run Development**:
+3. **Testing**:
+
+   The admin portal uses **Vitest** for unit testing. It is configured to be fast and compatible with Next.js modern architecture.
+
+   - **Run logic tests (Store/Utils)**:
+
+     ```bash
+     pnpm run test:pkg-store
+     ```
+
+   - **Run UI component tests**:
+
+     ```bash
+     pnpm run test:ui
+     ```
+
+   - **Run with coverage**:
+
+     ```bash
+     pnpm run test:coverage
+     ```
+
+   *How it works*: Vitest runs in a **jsdom** environment. We use `@testing-library/react` to render components in a virtual browser. Since Next.js uses server-side features, we mock `next/dynamic` and `next-themes` in `src/test/setup.ts` to ensure components render correctly in isolation.
+
+4. **Run Development**:
 
    ```bash
    pnpm run dev
