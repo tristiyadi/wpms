@@ -73,7 +73,31 @@ src/
    pnpm run seed
    ```
 
-5. **Run Development**:
+5. **Testing**:
+
+   The backend uses **Jest** for unit testing. Tests are located alongside their source files with the `.spec.ts` suffix.
+
+   - **Run all tests**:
+
+     ```bash
+     pnpm run test
+     ```
+
+   - **Run specific test file**:
+
+     ```bash
+     pnpm run test -- src/modules/packages/packages.service.spec.ts
+     ```
+
+   - **Run with coverage**:
+
+     ```bash
+     pnpm run test:cov
+     ```
+
+   *How it works*: We use `@nestjs/testing` to create a virtual testing module. Service dependencies (like TypeORM repositories) are replaced with mock objects using `jest.fn()`, allowing us to test business logic in isolation without a database.
+
+6. **Run Development**:
 
    ```bash
    pnpm run start:dev
