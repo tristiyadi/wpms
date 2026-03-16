@@ -4,6 +4,10 @@ import 'package:flutter/foundation.dart';
 import '../models/package_model.dart';
 
 class ApiService {
+  final http.Client _client;
+
+  ApiService({http.Client? client}) : _client = client ?? http.Client();
+
   // Use 10.0.2.2 for Android emulator, localhost for iOS/Web
   static String get baseUrl {
     if (kIsWeb) return 'http://localhost:3000';
@@ -13,7 +17,7 @@ class ApiService {
 
   Future<List<WellnessPackage>> fetchPackages() async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl/mobile/packages'));
+      final response = await _client.get(Uri.parse('$baseUrl/mobile/packages'));
 
       if (response.statusCode == 200) {
         List<dynamic> data = json.decode(response.body);
@@ -31,7 +35,7 @@ class ApiService {
   }
 
   Future<List<WellnessPackage>> _fetchWithLocalhost() async {
-    final response = await http.get(
+    final response = await _client.get(
       Uri.parse('http://localhost:3000/mobile/packages'),
     );
     if (response.statusCode == 200) {
